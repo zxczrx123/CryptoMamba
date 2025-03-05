@@ -1,4 +1,4 @@
-data_config: 'mode_1'
+data_config: 'mode_2'
 model: 'CMamba_v2'
 
 name: 'CMamba'

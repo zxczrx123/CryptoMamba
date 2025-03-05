@@ -1,0 +1,19 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            // "args": ["--config", "cmamba_v", "--ckpt_path", "checkpoints/cmamba_v.ckpt", "--split", "test", "--trade_mode", "smart_w_short"]
+            "args": ["--config", "cmamba_v", "--ckpt_path", "logs/CMamba/version_4/checkpoints/epoch371-val-rmse310.4195.ckpt", "--split", "test", "--trade_mode", "smart_w_short"]
+            // "args": ["--config", "cmamba_v", "--ckpt_path", "logs/CMamba/version_4/checkpoints/epoch371-val-rmse310.4195.ckpt", "--split", "test", "--trade_mode", "vanilla"]
+        }
+    ]
+}

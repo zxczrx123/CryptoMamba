@@ -178,7 +178,6 @@ if __name__ == '__main__':
         colors = ['darkblue']
         init_dir_flag = True
     
-    plt.figure(figsize=(15, 10))
     for conf, c in zip(config_list, colors):
         config = io_tools.load_config_from_yaml(f'{ROOT}/configs/training/{conf}.yaml')
         if init_dir_flag:
@@ -189,6 +188,7 @@ if __name__ == '__main__':
         model, normalize = load_model(config, args.ckpt_path) 
 
         use_volume = config.get('use_volume', False)
+        plt.figure(figsize=(15, 10))
         test_transform = DataTransform(is_train=False, use_volume=use_volume)
         data_module = CMambaDataModule(data_config,
                                         train_transform=test_transform,
@@ -240,7 +240,8 @@ if __name__ == '__main__':
             label = 'GRU'
         elif label == 'smamba':
             label = 'S-Mamba'
-        tmp = [timstamps[0] - 24 * 60 * 60] + timstamps
+        # TODO
+        tmp = [timstamps[0] - 60 * 60] + timstamps
         tmp = [datetime.fromtimestamp(int(x)) for x in tmp]
         sns.lineplot(x=tmp, 
                      y=balance_in_time, 
@@ -272,4 +273,5 @@ if __name__ == '__main__':
     plt.ylabel('Balance ($)')
     plt.xlabel('Date')
     plt.legend(loc='upper left')
+    print(f'save to {plot_path}')
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')

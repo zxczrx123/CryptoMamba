@@ -70,7 +70,7 @@ def get_args():
     )
     parser.add_argument(
         '--save_checkpoints', 
-        default=False,   
+        default=True,   
         action='store_true',          
     )
     parser.add_argument(
@@ -89,6 +89,12 @@ def get_args():
         type=int,
         default=200,
     )
+    
+    parser.add_argument(
+        '--ckpt_path',
+        type=str,
+        default=None,
+    )
 
     args = parser.parse_args()
     return args
@@ -105,7 +111,7 @@ def save_all_hparams(log_dir, args):
         yaml.dump(save_dict, f)
 
 
-def load_model(config, logger_type):
+def load_model(config, logger_type, ckpt_path=None):
     arch_config = io_tools.load_config_from_yaml('configs/models/archs.yaml')
     model_arch = config.get('model')
     model_config_path = f'{ROOT}/configs/models/{arch_config.get(model_arch)}'
@@ -119,6 +125,9 @@ def load_model(config, logger_type):
 
     model_config.get('params')['logger_type'] = logger_type
     model = io_tools.instantiate_from_config(model_config)
+    if ckpt_path is not None:
+        model_class = io_tools.get_obj_from_str(model_config.get('target'))
+        model = model_class.load_from_checkpoint(ckpt_path, **model_config.get('params'))
     model.cuda()
     model.train()
     return model, normalize
@@ -140,7 +149,7 @@ if __name__ == "__main__":
     val_transform = DataTransform(is_train=False, use_volume=use_volume)
     test_transform = DataTransform(is_train=False, use_volume=use_volume)
 
-    model, normalize = load_model(config, args.logger_type)
+    model, normalize = load_model(config, args.logger_type, args.ckpt_path)
 
     tmp = vars(args)
     tmp.update(config)
